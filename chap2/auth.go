@@ -11,6 +11,8 @@ import (
 	"github.com/stretchr/objx"
 )
 
+var egn = gin.Default()
+
 // loginHandler handles the third-party login process.
 func loginHandler(c *gin.Context) {
 	action := c.Param("action")
@@ -30,11 +32,12 @@ func loginHandler(c *gin.Context) {
 			return
 		}
 
-		// c.Writer.Header().Set("Location", loginURL)
-		// c.Writer.WriteHeader(http.StatusTemporaryRedirect)
-		c.Redirect(http.StatusTemporaryRedirect, loginURL)
+		tracer := trace.New(os.Stdout)
+		tracer.Trace("in login section!")
+		c.Redirect(307, loginURL)
 	case "callback":
-
+		tracer := trace.New(os.Stdout)
+		tracer.Trace("callback section!")
 		provider, err := gomniauth.Provider(provider)
 		if err != nil {
 			http.Error(c.Writer, fmt.Sprintf("Error when trying to get provider %s: %s", provider, err), http.StatusBadRequest)
@@ -63,6 +66,8 @@ func loginHandler(c *gin.Context) {
 			Name:  "auth",
 			Value: authCookieValue,
 			Path:  "/"})
+		// func (c *Context) SetCookie(name, value string, maxAge int, path, domain string, secure, httpOnly bool)
+		// c.SetCookie("auth", authCookieValue, 24*60*60, "/", "", false, false)
 		_, err = c.Request.Cookie("auth")
 		if err == nil {
 			tracer := trace.New(os.Stdout)
@@ -73,7 +78,7 @@ func loginHandler(c *gin.Context) {
 		}
 		// c.Writer.Header().Set("Location", "/chat")
 		// c.Writer.WriteHeader(http.StatusTemporaryRedirect)
-		c.Redirect(http.StatusTemporaryRedirect, "http://localhost:8080/chat")
+		c.Redirect(307, "http://localhost:8080/chat")
 	default:
 		c.Writer.WriteHeader(http.StatusNotFound)
 		fmt.Fprintf(c.Writer, "Auth action %s not supported", action)

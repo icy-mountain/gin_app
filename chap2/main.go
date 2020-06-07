@@ -15,18 +15,18 @@ import (
 func authCheck() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		tracer := trace.New(os.Stdout)
-		tracer.Trace("redirect!")
+		tracer.Trace("in auth check!")
 		_, err := c.Request.Cookie("auth")
 		if err == http.ErrNoCookie {
-			tracer := trace.New(os.Stdout)
 			tracer.Trace("redirect!")
-			c.Redirect(301, "http://localhost:8080/login")
-			c.Abort()
+			c.Redirect(307, "http://localhost:8080/login")
+			// return
+			c.AbortWithStatus(307)
 		}
 		if err != nil {
 			// some other error
 			http.Error(c.Writer, err.Error(), http.StatusInternalServerError)
-			c.Abort()
+			c.AbortWithStatus(500)
 		}
 		c.Next()
 	}
@@ -46,6 +46,8 @@ func main() {
 	)
 	egn.LoadHTMLGlob("templates/*.html")
 	egn.GET("/chat", authCheck(), func(c *gin.Context) {
+		tracer := trace.New(os.Stdout)
+		tracer.Trace("in chat!")
 		data := map[string]interface{}{
 			"Host": c.Request.Host,
 		}
