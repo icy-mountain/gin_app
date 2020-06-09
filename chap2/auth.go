@@ -66,18 +66,9 @@ func loginHandler(c *gin.Context) {
 			Name:  "auth",
 			Value: authCookieValue,
 			Path:  "/"})
-		// func (c *Context) SetCookie(name, value string, maxAge int, path, domain string, secure, httpOnly bool)
-		// c.SetCookie("auth", authCookieValue, 24*60*60, "/", "", false, false)
-		_, err = c.Request.Cookie("auth")
-		if err == nil {
-			tracer := trace.New(os.Stdout)
-			tracer.Trace("cookie OK!")
-		} else {
-			tracer := trace.New(os.Stdout)
-			tracer.Trace("cookie NG!")
-		}
-		// c.Writer.Header().Set("Location", "/chat")
-		// c.Writer.WriteHeader(http.StatusTemporaryRedirect)
+		db := db_connect()
+		defer db.Close()
+		db_create(db, &User{Name: user.Name()})
 		c.Redirect(307, "http://localhost:8080/chat")
 	default:
 		c.Writer.WriteHeader(http.StatusNotFound)

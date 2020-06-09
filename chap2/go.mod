@@ -6,6 +6,7 @@ require (
 	github.com/clbanning/x2j v0.0.0-20191024224557-825249438eec // indirect
 	github.com/gin-gonic/gin v1.6.3
 	github.com/gorilla/websocket v1.4.2
+	github.com/jinzhu/gorm v1.9.12
 	github.com/matryer/goblueprints v2.0.0+incompatible
 	github.com/stretchr/codecs v0.0.0-20170403063245-04a5b1e1910d // indirect
 	github.com/stretchr/gomniauth v0.0.0-20170717123514-4b6c822be2eb
