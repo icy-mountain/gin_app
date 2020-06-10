@@ -45,6 +45,9 @@ func main() {
 		google.New("160129032797-4cpkfrf3dd9lvfmr2ibpg473ampn4f71.apps.googleusercontent.com", "UTUNVwyoJPt8MTWrdQMmaw3T", "http://localhost:8080/auth/callback/google"),
 	)
 	egn.LoadHTMLGlob("templates/*.html")
+	egn.GET("/", func(c *gin.Context) {
+		c.Redirect(307, "http://localhost:8080/chat")
+	})
 	egn.GET("/chat", authCheck(), func(c *gin.Context) {
 		tracer := trace.New(os.Stdout)
 		tracer.Trace("in chat!")
