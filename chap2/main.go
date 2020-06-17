@@ -20,7 +20,6 @@ func authCheck() gin.HandlerFunc {
 		if err == http.ErrNoCookie {
 			tracer.Trace("redirect!")
 			c.Redirect(307, "http://localhost:8080/login")
-			// return
 			c.AbortWithStatus(307)
 		}
 		if err != nil {

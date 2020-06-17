@@ -1,4 +1,4 @@
-module gin_app.com/test
+module gin_app.com/chap1
 
 go 1.14
 
