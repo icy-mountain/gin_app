@@ -4,7 +4,7 @@ go 1.14
 
 require (
 	github.com/clbanning/x2j v0.0.0-20191024224557-825249438eec // indirect
-	github.com/gin-gonic/gin v1.7.2
+	github.com/gin-gonic/gin v1.7.7
 	github.com/gorilla/websocket v1.4.2
 	github.com/jinzhu/gorm v1.9.12
 	github.com/matryer/goblueprints v2.0.0+incompatible
